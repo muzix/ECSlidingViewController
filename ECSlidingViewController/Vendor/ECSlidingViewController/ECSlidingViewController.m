@@ -134,6 +134,7 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
     _topViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:[self fullViewBounds]].CGPath;
 
     [self.view insertSubview:_topViewController.view belowSubview:self.statusBarBackgroundView];
+    //[self.view insertSubview:self.topViewController.view belowSubview:self.statusBarBackgroundView];
     self.topViewSnapshot.frame = self.topView.bounds;
 }
 
@@ -554,6 +555,14 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
     return (CGRectGetWidth(self.view.bounds) / 2.0f);
 }
 
+- (CGRect)iOS7StyleScreenBounds {
+    CGRect bounds = [UIScreen mainScreen].bounds;
+    if (([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+        bounds.size = CGSizeMake(bounds.size.height, bounds.size.width);
+    }
+    return bounds;
+}
+
 - (CGRect)fullViewBounds
 {
     CGFloat statusBarHeight = 0.0f;
@@ -573,7 +582,8 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
         }
     }
 
-    CGRect bounds = [UIScreen mainScreen].bounds;
+    //CGRect bounds = [UIScreen mainScreen].bounds;
+    CGRect bounds = [self iOS7StyleScreenBounds];
 
     if (UIInterfaceOrientationIsLandscape(sharedApplication.statusBarOrientation)) {
         CGFloat height = CGRectGetWidth(bounds);
